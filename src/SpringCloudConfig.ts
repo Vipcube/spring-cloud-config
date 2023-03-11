@@ -64,8 +64,8 @@ export class SpringCloudConfig {
     ]);
 
     const { error } = BootstrapConfigSchema.validate(thisBootstrapConfig, { allowUnknown: true });
-    if (!(error ?? '')) {
-      throw new Error(error.details[0].message);
+    if (error) {
+      throw new Error(error);
     }
 
     thisBootstrapConfig.spring.cloud.config.profiles = options.activeProfiles;
