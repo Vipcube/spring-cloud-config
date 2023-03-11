@@ -1,24 +1,26 @@
-import { RetryOptions } from "./Retry";
+import { RetryOptions } from './Retry';
 
 export interface CloudConfigOptions {
-    bootstrapPath?: string;
-    configPath: string;
-    activeProfiles: string[];
-    level?: string;
+  bootstrapPath?: string;
+  configPath: string;
+  activeProfiles: string[];
+  level?: string;
 }
 
-export interface ConfigClientRetryOptions extends RetryOptions {}
+export interface ConfigClientRetryOptions extends RetryOptions {
+}
 
 export interface ConfigClientOptions {
-    enabled: boolean;
-    'fail-fast': boolean;
-    name: string;
-    retry?: ConfigClientRetryOptions;
+  enabled: boolean;
+  'fail-fast': boolean;
+  name: string;
+  retry?: ConfigClientRetryOptions;
 }
 
 export interface Document {
-    // tslint:disable-next-line: no-any
-    [name: string]: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [name: string]: any;
 }
 
-export interface ConfigObject extends Document {}
+export interface ConfigObject extends Document {
+}

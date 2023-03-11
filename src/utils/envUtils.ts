@@ -9,13 +9,13 @@ import { parsePropertiesToObjects } from './documentUtils';
  * @returns {ConfigObject} The Spring Application JSON from ENV as an Object.
  */
 export const getSpringApplicationJsonFromEnv = (): ConfigObject => {
-    let springApplicationJson: ConfigObject = {};
-    if (process.env.APPLICATION_JSON !== undefined) {
-        springApplicationJson = JSON.parse(process.env.APPLICATION_JSON);
-        logger.debug(`Spring Application JSON from Env: ${JSON.stringify(springApplicationJson)}`);
-    }
+  let springApplicationJson: ConfigObject = {};
+  if (process.env.APPLICATION_JSON !== undefined) {
+    springApplicationJson = JSON.parse(process.env.APPLICATION_JSON);
+    logger.debug(`Spring Application JSON from Env: ${JSON.stringify(springApplicationJson)}`);
+  }
 
-    return springApplicationJson;
+  return springApplicationJson;
 };
 
 /**
@@ -24,16 +24,16 @@ export const getSpringApplicationJsonFromEnv = (): ConfigObject => {
  * @returns {ConfigObject} The env variables mapped to a config properties object.
  */
 export const getPredefinedEnvProperties = (): ConfigObject => {
-    let customEnvProperties: ConfigObject = {};
-    Object.entries(PREDEFINED_ENV_PROPERTIES).forEach(([customEnvVariable, propertyMapping]) => {
-        if (process.env[customEnvVariable] !== undefined) {
-            customEnvProperties[propertyMapping] = process.env[customEnvVariable];
-        }
-    });
+  let customEnvProperties: ConfigObject = {};
+  Object.entries(PREDEFINED_ENV_PROPERTIES).forEach(([customEnvVariable, propertyMapping]) => {
+    if (process.env[customEnvVariable] !== undefined) {
+      customEnvProperties[propertyMapping] = process.env[customEnvVariable];
+    }
+  });
 
-    customEnvProperties = parsePropertiesToObjects(customEnvProperties);
+  customEnvProperties = parsePropertiesToObjects(customEnvProperties);
 
-    logger.debug(`Custom Properties from Env: ${JSON.stringify(customEnvProperties)}`);
+  logger.debug(`Custom Properties from Env: ${JSON.stringify(customEnvProperties)}`);
 
-    return customEnvProperties;
+  return customEnvProperties;
 };

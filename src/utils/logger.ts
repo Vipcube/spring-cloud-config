@@ -1,5 +1,6 @@
-import { createLogger, format, transports, LoggerOptions } from 'winston';
+import { createLogger, format, LoggerOptions, transports } from 'winston';
 import { Format } from 'logform';
+
 const { combine, timestamp, colorize, printf } = format;
 
 const myFormat: Format = printf(info => {

@@ -1,5 +1,5 @@
-import { Document } from "../models";
-import { logger } from ".";
+import { Document } from '../models';
+import { logger } from '.';
 import * as yaml from 'js-yaml';
 import * as fs from 'fs';
 import * as extend from 'extend';
@@ -13,24 +13,24 @@ import * as extend from 'extend';
  * @returns {boolean} True if the given yaml doc applies to the given profiles.
  */
 export const shouldUseDocument = (document: Document | undefined, activeProfiles?: string[]): boolean => {
-    let useThisDoc: boolean = false;
-    if (document && !document.profiles) {
-        useThisDoc = true; // This document applies to all profiles
-    } else if (document && activeProfiles) {
-        const documentProfiles: string[] = document.profiles.split(",");
-        for (let i = 0; i < documentProfiles.length; i++) {
-            if (documentProfiles[i][0] === "!") {
-                const excludedProfile: string = documentProfiles[i].substring(1);
-                if (activeProfiles.indexOf(excludedProfile) >= 0) {
-                    return false; // This document should not be used
-                }
-            } else if (activeProfiles.indexOf(documentProfiles[i]) >= 0) {
-                useThisDoc = true; // This document applies to the profiles
-            }
+  let useThisDoc: boolean = false;
+  if (document && !document.profiles) {
+    useThisDoc = true; // This document applies to all profiles
+  } else if (document && activeProfiles) {
+    const documentProfiles: string[] = document.profiles.split(',');
+    for (let i = 0; i < documentProfiles.length; i++) {
+      if (documentProfiles[i][0] === '!') {
+        const excludedProfile: string = documentProfiles[i].substring(1);
+        if (activeProfiles.indexOf(excludedProfile) >= 0) {
+          return false; // This document should not be used
         }
+      } else if (activeProfiles.indexOf(documentProfiles[i]) >= 0) {
+        useThisDoc = true; // This document applies to the profiles
+      }
     }
+  }
 
-    return useThisDoc;
+  return useThisDoc;
 };
 
 /**
@@ -43,15 +43,15 @@ export const shouldUseDocument = (document: Document | undefined, activeProfiles
  * @returns {Document} Object representation of the given yaml file.
  */
 export const readYaml = (relativePath: string, activeProfiles?: string[]): Document => {
-    logger.debug('loading config file from: ' + relativePath);
-    let doc: Document = {};
-    yaml.safeLoadAll(fs.readFileSync(relativePath, 'utf8'), (thisDoc) => {
-        if (shouldUseDocument(thisDoc, activeProfiles)) {
-            extend(true, doc, thisDoc);
-        }
-    });
+  logger.debug('loading config file from: ' + relativePath);
+  let doc: Document = {};
+  yaml.loadAll(fs.readFileSync(relativePath, 'utf8'), (thisDoc) => {
+    if (shouldUseDocument(thisDoc, activeProfiles)) {
+      extend(true, doc, thisDoc);
+    }
+  });
 
-    return doc;
+  return doc;
 };
 
 /**
@@ -62,19 +62,19 @@ export const readYaml = (relativePath: string, activeProfiles?: string[]): Docum
  * @param {*} propertyValue The value associated with the given property
  * @returns {any}
  */
-// tslint:disable-next-line: no-any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createObjectForProperty = (propertyKeys: string[], propertyValue: any): any => {
-    const thisPropertyName: string | undefined = propertyKeys.shift();
-    if (thisPropertyName === undefined) {
-        return propertyValue;
-    }
+  const thisPropertyName: string | undefined = propertyKeys.shift();
+  if (thisPropertyName === undefined) {
+    return propertyValue;
+  }
 
-    // tslint:disable-next-line: no-any
-    const thisPropertyValue: any = createObjectForProperty(propertyKeys, propertyValue);
-    var thisObject: object = {};
-    thisObject[thisPropertyName] = thisPropertyValue;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const thisPropertyValue: any = createObjectForProperty(propertyKeys, propertyValue);
+  var thisObject: object = {};
+  thisObject[thisPropertyName] = thisPropertyValue;
 
-    return thisObject;
+  return thisObject;
 };
 
 /**
@@ -85,15 +85,15 @@ export const createObjectForProperty = (propertyKeys: string[], propertyValue: a
  * @returns {object} Object of deeply nested properties (not dot-separated)
  */
 export const parsePropertiesToObjects = (propertiesObject: object | undefined): object => {
-    var object: object = {};
-    if (propertiesObject) {
-        for (let thisPropertyName in propertiesObject) {
-            const thisPropertyObject: object =
-                createObjectForProperty(thisPropertyName.split('.'), propertiesObject[thisPropertyName]);
-            extend(true, object, thisPropertyObject);
-        }
+  var object: object = {};
+  if (propertiesObject) {
+    for (let thisPropertyName in propertiesObject) {
+      const thisPropertyObject: object =
+        createObjectForProperty(thisPropertyName.split('.'), propertiesObject[thisPropertyName]);
+      extend(true, object, thisPropertyObject);
     }
-    return object;
+  }
+  return object;
 };
 
 /**
@@ -104,7 +104,7 @@ export const parsePropertiesToObjects = (propertiesObject: object | undefined): 
  * @returns {Document} Object representation of the given yaml file.
  */
 export const readYamlAsDocument = (relativePath: string, activeProfiles: string[]): Document => {
-    return parsePropertiesToObjects(readYaml(relativePath, activeProfiles));
+  return parsePropertiesToObjects(readYaml(relativePath, activeProfiles));
 };
 
 /**
@@ -116,10 +116,10 @@ export const readYamlAsDocument = (relativePath: string, activeProfiles: string[
  * @returns {object} Object containing the merged properties
  */
 export const mergeProperties = (objects: object[]): object => {
-    var mergedConfig: object = {};
-    for (var i = 0; i < objects.length; i++) {
-        extend(true, mergedConfig, objects[i]);
-    }
+  var mergedConfig: object = {};
+  for (var i = 0; i < objects.length; i++) {
+    extend(true, mergedConfig, objects[i]);
+  }
 
-    return mergedConfig;
+  return mergedConfig;
 };
